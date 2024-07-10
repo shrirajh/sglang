@@ -31,9 +31,13 @@ class ModelConfig:
             self.context_len = get_context_length(self.hf_config)
 
         # Unify the config keys for hf_config
+        if self.hf_config.model_type in ["mpt"]:
+            head_dim_name = "d_model"
+        else:
+            head_dim_name = "head_dim"
         self.head_dim = getattr(
             self.hf_config,
-            "head_dim",
+            head_dim_name,
             self.hf_config.hidden_size // self.hf_config.num_attention_heads,
         )
         self.num_attention_heads = self.hf_config.num_attention_heads
