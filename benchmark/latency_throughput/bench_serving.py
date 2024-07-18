@@ -157,6 +157,7 @@ async def send_request(
         pload = {
             "text": prompt,
             "sampling_params": params,
+            "stream": True,
         }
     elif backend == "lightllm":
         assert not use_beam_search
@@ -184,6 +185,7 @@ async def send_request(
                     async for chunk, _ in response.content.iter_chunks():
                         chunks.append(chunk)
                 output = b"".join(chunks).decode("utf-8")
+                break
                 output = json.loads(output)
 
                 # Re-send the request if it failed.

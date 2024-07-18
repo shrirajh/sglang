@@ -41,22 +41,24 @@ class DetokenizerManager:
             assert isinstance(recv_obj, BatchTokenIDOut)
 
             # TODO(lmzheng): handle skip_special_tokens/spaces_between_special_tokens per request
-            surr_texts = self.tokenizer.batch_decode(
-                recv_obj.surr_output_ids,
-                skip_special_tokens=recv_obj.skip_special_tokens[0],
-                spaces_between_special_tokens=recv_obj.spaces_between_special_tokens[0],
-            )
-            read_texts = self.tokenizer.batch_decode(
-                recv_obj.read_output_ids,
-                skip_special_tokens=recv_obj.skip_special_tokens[0],
-                spaces_between_special_tokens=recv_obj.spaces_between_special_tokens[0],
-            )
+            if True:
+                surr_texts = self.tokenizer.batch_decode(
+                    recv_obj.surr_output_ids,
+                    skip_special_tokens=recv_obj.skip_special_tokens[0],
+                    spaces_between_special_tokens=recv_obj.spaces_between_special_tokens[0],
+                )
+                read_texts = self.tokenizer.batch_decode(
+                    recv_obj.read_output_ids,
+                    skip_special_tokens=recv_obj.skip_special_tokens[0],
+                    spaces_between_special_tokens=recv_obj.spaces_between_special_tokens[0],
+                )
 
             # Trim stop str
             # TODO(lmzheng): handle the case where multiple stop strs are hit
             output_strs = []
             for i in range(len(recv_obj.rids)):
-                new_text = read_texts[i][len(surr_texts[i]) :]
+                #new_text = read_texts[i][len(surr_texts[i]) :]
+                new_text = "dummy"
                 if recv_obj.finished_reason[i] is None:
                     new_text = find_printable_text(new_text)
                 output_strs.append(recv_obj.decoded_texts[i] + new_text)
